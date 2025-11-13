@@ -13,14 +13,14 @@ def extract_colors(img_path, n):
     pixels = img.reshape(-1, 3)
 
     kmeans = KMeans(n_clusters=n, random_state=42)
-    kmeans.fit(pixels)
+    labels = kmeans.fit_predict(pixels)
     colors = kmeans.cluster_centers_.astype(int)
 
-    labels, counts = np.unique(colors, return_counts=True)
+    counts = np.bincount(labels)
     sorted_idx = np.argsort(-counts)
     sorted_colors = colors[sorted_idx]
 
-    return sorted_colors
+    return [tuple(c) for c in sorted_colors]
 
 
 def rgb_to_hex(rgb):
